@@ -24,6 +24,7 @@ function App() {
           <Route path='/product' exact component={Product}/>
           <Route path='/productdisplay' exact component={DisplayPruct}/>
           <Route  path="/product/:slug"exact component={DetailProduct} />
+          <Route   component={Home}/>
           </Switch>
        <Footer />
     </Router>
