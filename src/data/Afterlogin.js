@@ -1,16 +1,14 @@
 import React from 'react'
 import Showdata from './Showdata'
-
+import './AfterLogin.css'
 export default function Afterlogin({Logout}) {
     return (
-        <div>
+        <>
             <div className="welcome">
-          <h2>welcome</h2>
-         
-          <button onClick={Logout}>logout</button>
-          <Showdata />
-
-        </div>
-        </div>
+              <h2>WELCOME</h2>
+              <a class="submit" onClick={Logout} >Sign Out</a>
+            </div>
+             <Showdata />
+       </>
     )
 }

@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react'
+import Loading from '../components/Loading';
 import Image from './Image';
 import SingleData from './SingleData';
 
@@ -25,7 +26,7 @@ export default function Showdata() {
       },[])
       console.log(result);
       if(!result){
-          return <h1>loading</h1>
+          return <Loading />
       }
     return (
         <>

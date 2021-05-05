@@ -1,23 +1,23 @@
-import logo from './logo.svg';
+
 import './App.css';
 import React, {useEffect, useState} from 'react'
 import LoginForm from './components/LoginForm';
-import Showdata from './data/Showdata';
 import Afterlogin from './data/Afterlogin';
 import {Switch , Route } from 'react-router-dom'
-import { Redirect } from 'react-router';
+
 const key = "v3YvEB7MQAmosLDjPHKa3LWyfEikMU5GVzZqNLF77lFP2hsKuQ"
 const secret = "91BEGtP8Iv5UcmGpEljgKTzYCmNwUAvCwMSyFi1H"
 
 
 function App() {
-  // login
+
   var keyLogin = "login";
 
   var validate = localStorage.getItem(keyLogin)
   if(validate === null)
     validate = false
   const [user , setUser] = useState(validate)
+  const [error , setError] = useState("")
 
 
   const Login = detail =>{
@@ -28,14 +28,14 @@ function App() {
       console.log(user);
     }
     else{
-      
-      console.log("out");
+      setError("Wrong Username or password")
     }
   }
   const Logout = () =>{
     setUser(localStorage.setItem(keyLogin,false))
     setUser(localStorage.getItem(keyLogin))
     console.log(user);
+    
   }
 //  ...... get token
   var storageKey = 'token';
@@ -60,8 +60,7 @@ function App() {
     getTheToken()
   },[])
   return (
-    <h1>
-    <div className="App">
+   <>
       {user === "true" ? (
         <Switch>
           <Route path="/" exact children={<Afterlogin Logout={Logout} />} />
@@ -70,14 +69,12 @@ function App() {
       )
     : (
       <Switch>
-        <Route path="/" exact children={<LoginForm Login={Login}  />} /> 
-        <Route  exact children={<LoginForm Login={Login}  />} /> 
+        <Route path="/" exact children={<LoginForm Login={Login}  error={error} />} /> 
+        <Route  exact children={<LoginForm Login={Login} error={error}  />} /> 
       </Switch>
     )
     }
-    </div>
-     
-     </h1>
+   </>
   );
 }
 

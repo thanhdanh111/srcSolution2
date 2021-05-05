@@ -1,14 +1,19 @@
 import React from 'react'
 import Image from './Image'
+import Fade from 'react-reveal/Fade'
 
 export default function SingleData({result}) {
     return (
-        <div >
+     <>
             {
                 result.map(item =>{
-                    return <Image key={item.id} result={item} />
+                    return (
+                        <Fade left>
+                            <Image key={item.id} result={item} />
+                        </Fade>
+                    )
                 })
             }
-        </div>
+            </>
     )
 }
