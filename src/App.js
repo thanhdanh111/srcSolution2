@@ -1,43 +1,16 @@
 
 import './App.css';
 import React, {useEffect, useState} from 'react'
-import LoginForm from './components/LoginForm';
+import {auth , db} from './components/firebase'
+import LoginDemo from './components/LoginForm';
 import Afterlogin from './data/Afterlogin';
 import {Switch , Route } from 'react-router-dom'
-
 const key = "v3YvEB7MQAmosLDjPHKa3LWyfEikMU5GVzZqNLF77lFP2hsKuQ"
 const secret = "91BEGtP8Iv5UcmGpEljgKTzYCmNwUAvCwMSyFi1H"
 
-
 function App() {
-
-  var keyLogin = "login";
-
-  var validate = localStorage.getItem(keyLogin)
-  if(validate === null)
-    validate = false
-  const [user , setUser] = useState(validate)
-  const [error , setError] = useState("")
-
-
-  const Login = detail =>{
-    console.log(detail);
-    if(detail.email == key && detail.password== secret){
-      localStorage.setItem(keyLogin,true)
-      setUser(localStorage.getItem(keyLogin))
-      console.log(user);
-    }
-    else{
-      setError("Wrong Username or password")
-    }
-  }
-  const Logout = () =>{
-    setUser(localStorage.setItem(keyLogin,false))
-    setUser(localStorage.getItem(keyLogin))
-    console.log(user);
-    
-  }
-//  ...... get token
+  const [user , setUser] = useState(auth)
+  const [initializing , setInitializing] = useState(true)
   var storageKey = 'token';
     async function getTheToken  (){
     const params = new URLSearchParams();
@@ -55,25 +28,45 @@ function App() {
       localStorage.setItem(storageKey,data.access_token)
   }
   
-  
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+        if(user){
+            setUser(user);
+            
+        } else{
+
+            setUser(null);
+        }
+        if(initializing){
+            setInitializing(false)
+        }
+    })
+    return unsubscribe;
+},[]);
   useEffect(  () =>{
     getTheToken()
   },[])
   return (
    <>
-      {user === "true" ? (
+     {
+       user ? (
+         <>
+         <Switch>
+         <Route  exact  path="/" component={Afterlogin}/>
+         <Route  exact   component={Afterlogin}/>
+         </Switch>
+     
+         </>
+       )
+       :
+       (  
         <Switch>
-          <Route path="/" exact children={<Afterlogin Logout={Logout} />} />
-          <Route  exact children={<Afterlogin Logout={Logout} />} />
+        <Route  exact  path="/" component={LoginDemo}/>
+        <Route  exact   component={LoginDemo}/>
         </Switch>
-      )
-    : (
-      <Switch>
-        <Route path="/" exact children={<LoginForm Login={Login}  error={error} />} /> 
-        <Route  exact children={<LoginForm Login={Login} error={error}  />} /> 
-      </Switch>
-    )
-    }
+       )
+     }
+
    </>
   );
 }
